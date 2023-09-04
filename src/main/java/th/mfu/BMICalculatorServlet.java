@@ -9,19 +9,39 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 //TODO: add webservlet to "/calbmi"
+@WebServlet(urlPatterns = "/calbmi")
 public class BMICalculatorServlet extends HttpServlet{
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //TODO: get parameter from request: "weight" and "height"
+        Double weight = Double.parseDouble(request.getParameter("weight"));
+        Double height = Double.parseDouble(request.getParameter("height"));
         
         //TODO: calculate bmi
+        double BMI = Math.round(weight/(height*height)*100)/100;
+
+        String BmiInfo = null;
 
         //TODO: determine the built from BMI
+        if(BMI < 18.5) {
+            BmiInfo = " underweight ";
+        } else if (BMI >= 18.5 && BMI < 25) {
+            BmiInfo = " normal ";
+        } else if (BMI >= 25 && BMI < 30) {
+            BmiInfo = " overweight ";
+        } else if (BMI >= 30 && BMI < 35) {
+            BmiInfo = " obese ";
+        } else if (BMI >= 35) {
+            BmiInfo = " extremely obese ";
+        }
       
         //TODO: add bmi and built to the request's attribute
+        request.setAttribute("BmiInfo", BmiInfo);
+        request.setAttribute("BMI", BMI);
 
         //TODO: forward to jsp
+        request.getRequestDispatcher("/bmi_result.jsp").forward(request, response);
            
     }
     
